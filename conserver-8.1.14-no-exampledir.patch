@@ -1,0 +1,40 @@
+diff -urN conserver-8.1.14/conserver/Makefile.in conserver-8.1.14-patched/conserver/Makefile.in
+--- conserver-8.1.14/conserver/Makefile.in	2005-06-06 10:03:06.000000000 -0500
++++ conserver-8.1.14-patched/conserver/Makefile.in	2006-04-07 12:56:44.000000000 -0500
+@@ -9,7 +9,6 @@
+ datadir = @datadir@
+ libdir = @libdir@
+ pkglibdir = $(libdir)/conserver
+-exampledir = $(datadir)/examples/conserver
+ 
+ ### Installation programs and flags
+ INSTALL = @INSTALL@
+@@ -63,8 +62,6 @@
+ 	$(INSTALL_PROGRAM) conserver $(DESTDIR)$(sbindir)
+ 	$(MKDIR) $(DESTDIR)$(mandir)/man8
+ 	$(INSTALL) conserver.man $(DESTDIR)$(mandir)/man8/conserver.8
+-	$(MKDIR) $(DESTDIR)$(exampledir)
+-	$(INSTALL) conserver.rc $(DESTDIR)$(exampledir)
+ 	$(MKDIR) $(DESTDIR)$(pkglibdir)
+ 	$(INSTALL) convert $(DESTDIR)$(pkglibdir)/convert
+ 
+diff -urN conserver-8.1.14/conserver.cf/Makefile.in conserver-8.1.14-patched/conserver.cf/Makefile.in
+--- conserver-8.1.14/conserver.cf/Makefile.in	2004-02-09 18:32:28.000000000 -0600
++++ conserver-8.1.14-patched/conserver.cf/Makefile.in	2006-04-07 12:57:07.000000000 -0500
+@@ -4,7 +4,6 @@
+ mandir = @mandir@
+ sysconfdir = @sysconfdir@
+ datadir = @datadir@
+-exampledir = $(datadir)/examples/conserver
+ 
+ ### Installation programs and flags
+ INSTALL = @INSTALL@
+@@ -26,8 +25,5 @@
+ 	$(MKDIR) $(DESTDIR)$(mandir)/man5
+ 	$(INSTALL) conserver.cf.man $(DESTDIR)$(mandir)/man5/conserver.cf.5
+ 	$(INSTALL) conserver.passwd.man $(DESTDIR)$(mandir)/man5/conserver.passwd.5
+-	$(MKDIR) $(DESTDIR)$(exampledir)
+-	$(INSTALL) -m 0644 conserver.cf $(DESTDIR)$(exampledir)
+-	$(INSTALL) -m 0644 conserver.passwd $(DESTDIR)$(exampledir)
+ 
+ .PHONY: clean distclean install

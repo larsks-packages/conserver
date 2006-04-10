@@ -1,0 +1,74 @@
+diff -urN conserver-8.1.14/contrib/redhat-rpm/conserver.init conserver-8.1.14-patched/contrib/redhat-rpm/conserver.init
+--- conserver-8.1.14/contrib/redhat-rpm/conserver.init	2003-02-27 20:06:50.000000000 -0600
++++ conserver-8.1.14-patched/contrib/redhat-rpm/conserver.init	2006-04-07 13:52:23.000000000 -0500
+@@ -2,7 +2,7 @@
+ #
+ # conserver -- serial-port console daemon
+ #
+-# chkconfig: 2345 92 08
++# chkconfig: - 92 08
+ # description: conserver is a serial-port console daemon
+ # config: /etc/conserver.cf
+ #
+@@ -19,32 +19,49 @@
+ # make sure conserver is installed and executable
+ [ -x /usr/sbin/conserver  ] || exit 1
+ 
++start()
++{
++	echo -n "Starting conserver: "
++	daemon conserver -d
++	RETVAL=$?
++	[ "$RETVAL" = 0 ] && touch /var/lock/subsys/conserver
++	echo
++}
++
++stop()
++{
++	echo -n "Shutting down conserver: "
++	killproc conserver
++	RETVAL=$?
++	[ "$RETVAL" = 0 ] && rm -f /var/lock/subsys/conserver
++	echo
++}
+ 
+ # See how we were called.
+ case "$1" in
+   start)
+-    echo -n "Starting conserver: "
+-    daemon conserver -d
+-    echo
+-    touch /var/lock/subsys/conserver
++    start
+     ;;
+   stop)
+-    echo -n "Shutting down conserver: "
+-    killproc conserver
+-    echo
+-    rm -f /var/lock/subsys/conserver
++    stop
+     ;;
+   status)
+     status conserver
++    RETVAL=$?
+     ;;
+   restart)
+-    echo -n "Restarting conserver: "
++    stop
++    start
++    ;;
++  reload)
++    echo -n "Reloading conserver: "
+     killproc conserver -HUP
++    RETVAL=$?
+     echo
+     ;;
+   *)
+-    echo "Usage: conserver {start|stop|restart|status}"
+-    exit 1
++    echo "Usage: conserver {start|stop|restart|reload|status}"
++    RETVAL=1
+ esac
+ 
+-exit 0
++exit $RETVAL
