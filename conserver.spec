@@ -1,6 +1,6 @@
 Name:           conserver
 Version:        8.1.14
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
@@ -21,6 +21,13 @@ Conserver is an application that allows multiple users to watch a serial
 console at the same time.  It can log the data, allows users to take 
 write-access of a console (one at a time), and has a variety of bells 
 and whistles to accentuate that basic functionality.
+
+%package client
+Summary: Serial console client
+Group: Applications/Communications
+
+%description client
+This is the client package needed to interact with a Conserver daemon.
 
 %prep
 %setup -q
@@ -70,7 +77,13 @@ if [ -x %{_initrddir}/conserver ]; then
 fi
 # make sure /etc/services has a conserver entry
 if ! egrep '\<conserver\>' /etc/services > /dev/null 2>&1 ; then
-  echo "console		 782/tcp	conserver" >> /etc/services
+  echo "console		782/tcp		conserver" >> /etc/services
+fi
+
+%post client
+# make sure /etc/services has a conserver entry
+if ! egrep '\<conserver\>' /etc/services > /dev/null 2>&1 ; then
+  echo "console		782/tcp		conserver" >> /etc/services
 fi
 
 
@@ -88,15 +101,22 @@ fi
 %doc CHANGES FAQ LICENSE INSTALL README conserver.cf/samples/ conserver.cf/conserver.cf conserver.cf/conserver.passwd
 %config(noreplace) %{_sysconfdir}/conserver.*
 %{_initrddir}/conserver
-%{_bindir}/console
 %{_libdir}/conserver
-%{_mandir}/man1/console.1.gz
 %{_mandir}/man5/conserver.cf.5.gz
 %{_mandir}/man5/conserver.passwd.5.gz
 %{_mandir}/man8/conserver.8.gz
 %{_sbindir}/conserver
 
+%files client
+%defattr(-,root,root,-)
+%doc LICENSE
+%{_bindir}/console
+%{_mandir}/man1/console.1.gz
+
 %changelog
+* Wed Apr 26 2006 Patrick "Jima" Laughton <jima@auroralinux.org> 8.1.14-2
+- Split 'console' out to -client subpackage, as suggested by Nate Straz
+
 * Mon Apr 10 2006 Patrick "Jima" Laughton <jima@auroralinux.org> 8.1.14-1
 - Figures, two days after my initial Fedora Extras RPM, a new release...
 
