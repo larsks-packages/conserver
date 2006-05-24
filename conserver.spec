@@ -1,14 +1,15 @@
 Name:           conserver
 Version:        8.1.14
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
 License:        Distributable
 URL:            http://www.conserver.com/
 Source0:        http://www.conserver.com/%{name}-%{version}.tar.gz
-Patch0:        http://beer.tclug.org/fedora-extras/%{name}/%{name}-%{version}-no-exampledir.patch
-Patch1:        http://beer.tclug.org/fedora-extras/%{name}/%{name}-%{version}-initscript.patch
+Patch0:         http://beer.tclug.org/fedora-extras/%{name}/%{name}-%{version}-no-exampledir.patch
+Patch1:         http://beer.tclug.org/fedora-extras/%{name}/%{name}-%{version}-initscript.patch
+Patch2:         http://beer.tclug.org/fedora-extras/%{name}/%{name}-%{version}-oldkrb.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  pam-devel, openssl-devel, tcp_wrappers
@@ -33,6 +34,7 @@ This is the client package needed to interact with a Conserver daemon.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 
 %build
@@ -41,8 +43,7 @@ f="conserver/Makefile.in"
 %{__mv} $f $f.orig
 %{__sed} -e 's/^.*conserver\.rc.*$//' < $f.orig > $f
 
-%configure --with-uds \
-	--with-libwrap \
+%configure --with-libwrap \
 	--with-openssl \
 	--with-pam
 
@@ -114,6 +115,10 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Wed May 24 2006 Patrick "Jima" Laughton <jima@beer.tclug.org> 8.1.14-3
+- Fix from Nate Straz: UDS support (pre-emptively fixed bug 192910)
+- Fix from Nate Straz: krb detection
+
 * Wed Apr 26 2006 Patrick "Jima" Laughton <jima@auroralinux.org> 8.1.14-2
 - Split 'console' out to -client subpackage, as suggested by Nate Straz
 
