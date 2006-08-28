@@ -1,6 +1,6 @@
 Name:           conserver
 Version:        8.1.14
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
@@ -115,6 +115,9 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Mon Aug 28 2006 Patrick "Jima" Laughton <jima@beer.tclug.org> 8.1.14-4
+- Rebuild for FC6
+
 * Wed May 24 2006 Patrick "Jima" Laughton <jima@beer.tclug.org> 8.1.14-3
 - Fix from Nate Straz: UDS support (pre-emptively fixed bug 192910)
 - Fix from Nate Straz: krb detection
