@@ -1,15 +1,15 @@
 Name:           conserver
-Version:        8.1.14
-Release:        4%{?dist}
+Version:        8.1.15
+Release:        1%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
 License:        Distributable
 URL:            http://www.conserver.com/
 Source0:        http://www.conserver.com/%{name}-%{version}.tar.gz
-Patch0:         http://beer.tclug.org/fedora-extras/%{name}/%{name}-%{version}-no-exampledir.patch
-Patch1:         http://beer.tclug.org/fedora-extras/%{name}/%{name}-%{version}-initscript.patch
-Patch2:         http://beer.tclug.org/fedora-extras/%{name}/%{name}-%{version}-oldkrb.patch
+Patch0:         http://beer.tclug.org/fedora-extras/%{name}/%{name}-8.1.14-no-exampledir.patch
+Patch1:         http://beer.tclug.org/fedora-extras/%{name}/%{name}-8.1.14-initscript.patch
+Patch2:         http://beer.tclug.org/fedora-extras/%{name}/%{name}-8.1.14-oldkrb.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  pam-devel, openssl-devel, tcp_wrappers
@@ -44,8 +44,8 @@ f="conserver/Makefile.in"
 %{__sed} -e 's/^.*conserver\.rc.*$//' < $f.orig > $f
 
 %configure --with-libwrap \
-	--with-openssl \
-	--with-pam
+        --with-openssl \
+        --with-pam
 
 make %{?_smp_mflags}
 
@@ -115,6 +115,10 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Wed Jan 03 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 8.1.15-1
+- New upstream release
+- Fix rpmlint warning about mixed spaces/tabs
+
 * Mon Aug 28 2006 Patrick "Jima" Laughton <jima@beer.tclug.org> 8.1.14-4
 - Rebuild for FC6
 
