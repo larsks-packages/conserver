@@ -1,0 +1,33 @@
+--- conserver-8.1.16/conserver.cf/Makefile.in.orig	2007-04-11 14:04:28.000000000 -0500
++++ conserver-8.1.16/conserver.cf/Makefile.in	2007-04-11 14:06:51.000000000 -0500
+@@ -23,7 +23,7 @@
+ 
+ install:
+ 	$(MKDIR) $(DESTDIR)$(mandir)/man5
+-	$(INSTALL) conserver.cf.man $(DESTDIR)$(mandir)/man5/conserver.cf.5
+-	$(INSTALL) conserver.passwd.man $(DESTDIR)$(mandir)/man5/conserver.passwd.5
++	$(INSTALL) -m 0644 conserver.cf.man $(DESTDIR)$(mandir)/man5/conserver.cf.5
++	$(INSTALL) -m 0644 conserver.passwd.man $(DESTDIR)$(mandir)/man5/conserver.passwd.5
+ 
+ .PHONY: clean distclean install
+--- conserver-8.1.16/conserver/Makefile.in.orig	2007-04-11 14:04:28.000000000 -0500
++++ conserver-8.1.16/conserver/Makefile.in	2007-04-11 14:05:27.000000000 -0500
+@@ -61,7 +61,7 @@
+ 	$(MKDIR) $(DESTDIR)$(sbindir)
+ 	$(INSTALL_PROGRAM) conserver $(DESTDIR)$(sbindir)
+ 	$(MKDIR) $(DESTDIR)$(mandir)/man8
+-	$(INSTALL) conserver.man $(DESTDIR)$(mandir)/man8/conserver.8
++	$(INSTALL) -m 0644 conserver.man $(DESTDIR)$(mandir)/man8/conserver.8
+ 	$(MKDIR) $(DESTDIR)$(pkglibdir)
+ 	$(INSTALL) convert $(DESTDIR)$(pkglibdir)/convert
+ 
+--- conserver-8.1.16/console/Makefile.in.orig	2004-05-12 16:02:13.000000000 -0500
++++ conserver-8.1.16/console/Makefile.in	2007-04-11 14:05:13.000000000 -0500
+@@ -56,6 +56,6 @@
+ 	$(MKDIR) $(DESTDIR)$(bindir)
+ 	$(INSTALL_PROGRAM) console $(DESTDIR)$(bindir)
+ 	$(MKDIR) $(DESTDIR)$(mandir)/man1
+-	$(INSTALL) console.man $(DESTDIR)$(mandir)/man1/console.1
++	$(INSTALL) -m 0644 console.man $(DESTDIR)$(mandir)/man1/console.1
+ 
+ .PHONY: clean distclean install

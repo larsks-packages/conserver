@@ -1,5 +1,5 @@
 Name:           conserver
-Version:        8.1.15
+Version:        8.1.16
 Release:        1%{?dist}
 Summary:        Serial console server daemon/client
 
@@ -7,9 +7,10 @@ Group:          System Environment/Daemons
 License:        Distributable
 URL:            http://www.conserver.com/
 Source0:        http://www.conserver.com/%{name}-%{version}.tar.gz
-Patch0:         http://beer.tclug.org/fedora-extras/%{name}/%{name}-8.1.14-no-exampledir.patch
-Patch1:         http://beer.tclug.org/fedora-extras/%{name}/%{name}-8.1.14-initscript.patch
-Patch2:         http://beer.tclug.org/fedora-extras/%{name}/%{name}-8.1.14-oldkrb.patch
+Patch0:         %{name}-8.1.14-no-exampledir.patch
+Patch1:         %{name}-8.1.14-initscript.patch
+Patch2:         %{name}-8.1.14-oldkrb.patch
+Patch3:         %{name}-manperms.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  pam-devel, openssl-devel, tcp_wrappers
@@ -35,6 +36,7 @@ This is the client package needed to interact with a Conserver daemon.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 
 %build
@@ -115,6 +117,12 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Wed Apr 11 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 8.1.16-1
+- New upstream release with "certainly important" bugfix
+- Removed URLs from patch lines (it's all in CVS)
+- Added patch to fix man page permissions (755 -> 644)
+- rpmlint's "mixed-use-of-spaces-and-tabs" is mostly a false positive
+
 * Wed Jan 03 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 8.1.15-1
 - New upstream release
 - Fix rpmlint warning about mixed spaces/tabs
