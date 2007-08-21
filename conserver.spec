@@ -1,6 +1,6 @@
 Name:           conserver
 Version:        8.1.16
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
@@ -117,6 +117,9 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Tue Aug 21 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 8.1.16-2
+- Rebuild for BuildID
+
 * Wed Apr 11 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 8.1.16-1
 - New upstream release with "certainly important" bugfix
 - Removed URLs from patch lines (it's all in CVS)
