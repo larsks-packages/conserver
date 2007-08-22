@@ -1,10 +1,10 @@
 Name:           conserver
 Version:        8.1.16
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
-License:        Distributable
+License:        BSD with advertising and zlib
 URL:            http://www.conserver.com/
 Source0:        http://www.conserver.com/%{name}-%{version}.tar.gz
 Patch0:         %{name}-8.1.14-no-exampledir.patch
@@ -117,6 +117,9 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Wed Aug 22 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 8.1.16-3
+- License clarification
+
 * Tue Aug 21 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 8.1.16-2
 - Rebuild for BuildID
 
