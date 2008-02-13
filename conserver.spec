@@ -1,6 +1,6 @@
 Name:           conserver
 Version:        8.1.16
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
@@ -117,6 +117,9 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Wed Feb 13 2008 Patrick "Jima" Laughton <jima@beer.tclug.org> 8.1.16-5
+- Bump-n-build for GCC 4.3
+
 * Tue Dec 04 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 8.1.16-4
 - Bump-n-build for openssl soname change
 
