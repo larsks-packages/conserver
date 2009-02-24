@@ -1,6 +1,6 @@
 Name:           conserver
 Version:        8.1.16
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
@@ -117,6 +117,9 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Tue Feb 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 8.1.16-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
+
 * Thu Jan 15 2009 Tomas Mraz <tmraz@redhat.com> 8.1.16-6
 - rebuild with new openssl
 
