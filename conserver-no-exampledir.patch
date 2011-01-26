@@ -1,6 +1,6 @@
-diff -urN conserver-8.1.14/conserver/Makefile.in conserver-8.1.14-patched/conserver/Makefile.in
---- conserver-8.1.14/conserver/Makefile.in	2005-06-06 10:03:06.000000000 -0500
-+++ conserver-8.1.14-patched/conserver/Makefile.in	2006-04-07 12:56:44.000000000 -0500
+diff -urN conserver-8.1.18/conserver/Makefile.in conserver-8.1.18-patched/conserver/Makefile.in
+--- conserver-8.1.18/conserver/Makefile.in	2011-01-25 17:34:37.000000000 -0600
++++ conserver-8.1.18-patched/conserver/Makefile.in	2011-01-25 16:40:37.000000000 -0600
 @@ -9,7 +9,6 @@
  datadir = @datadir@
  libdir = @libdir@
@@ -12,15 +12,15 @@ diff -urN conserver-8.1.14/conserver/Makefile.in conserver-8.1.14-patched/conser
 @@ -63,8 +62,6 @@
  	$(INSTALL_PROGRAM) conserver $(DESTDIR)$(sbindir)
  	$(MKDIR) $(DESTDIR)$(mandir)/man8
- 	$(INSTALL) conserver.man $(DESTDIR)$(mandir)/man8/conserver.8
+ 	$(INSTALL) -m 0644 conserver.man $(DESTDIR)$(mandir)/man8/conserver.8
 -	$(MKDIR) $(DESTDIR)$(exampledir)
 -	$(INSTALL) conserver.rc $(DESTDIR)$(exampledir)
  	$(MKDIR) $(DESTDIR)$(pkglibdir)
  	$(INSTALL) convert $(DESTDIR)$(pkglibdir)/convert
  
-diff -urN conserver-8.1.14/conserver.cf/Makefile.in conserver-8.1.14-patched/conserver.cf/Makefile.in
---- conserver-8.1.14/conserver.cf/Makefile.in	2004-02-09 18:32:28.000000000 -0600
-+++ conserver-8.1.14-patched/conserver.cf/Makefile.in	2006-04-07 12:57:07.000000000 -0500
+diff -urN conserver-8.1.18/conserver.cf/Makefile.in conserver-8.1.18-patched/conserver.cf/Makefile.in
+--- conserver-8.1.18/conserver.cf/Makefile.in	2009-10-07 18:00:04.000000000 -0500
++++ conserver-8.1.18-patched/conserver.cf/Makefile.in	2011-01-25 17:35:34.000000000 -0600
 @@ -4,7 +4,6 @@
  mandir = @mandir@
  sysconfdir = @sysconfdir@
@@ -31,8 +31,8 @@ diff -urN conserver-8.1.14/conserver.cf/Makefile.in conserver-8.1.14-patched/con
  INSTALL = @INSTALL@
 @@ -26,8 +25,5 @@
  	$(MKDIR) $(DESTDIR)$(mandir)/man5
- 	$(INSTALL) conserver.cf.man $(DESTDIR)$(mandir)/man5/conserver.cf.5
- 	$(INSTALL) conserver.passwd.man $(DESTDIR)$(mandir)/man5/conserver.passwd.5
+ 	$(INSTALL) -m 0644 conserver.cf.man $(DESTDIR)$(mandir)/man5/conserver.cf.5
+ 	$(INSTALL) -m 0644 conserver.passwd.man $(DESTDIR)$(mandir)/man5/conserver.passwd.5
 -	$(MKDIR) $(DESTDIR)$(exampledir)
 -	$(INSTALL) -m 0644 conserver.cf $(DESTDIR)$(exampledir)
 -	$(INSTALL) -m 0644 conserver.passwd $(DESTDIR)$(exampledir)

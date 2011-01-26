@@ -1,19 +1,18 @@
 Name:           conserver
-Version:        8.1.16
-Release:        9%{?dist}
+Version:        8.1.18
+Release:        1%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
 License:        BSD with advertising and zlib
 URL:            http://www.conserver.com/
 Source0:        http://www.conserver.com/%{name}-%{version}.tar.gz
-Patch0:         %{name}-8.1.14-no-exampledir.patch
-Patch1:         %{name}-8.1.14-initscript.patch
-Patch2:         %{name}-8.1.14-oldkrb.patch
-Patch3:         %{name}-manperms.patch
+Patch0:         %{name}-no-exampledir.patch
+Patch1:         %{name}-initscript.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  pam-devel, openssl-devel, tcp_wrappers
+BuildRequires:  pam-devel, openssl-devel, tcp_wrappers-devel, krb5-devel
+BuildRequires:  libgssapi-devel, libgssglue-devel
 Requires(post): /sbin/chkconfig
 Requires(preun): /sbin/chkconfig
 Requires(preun): /sbin/service
@@ -35,8 +34,6 @@ This is the client package needed to interact with a Conserver daemon.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
 
 
 %build
@@ -47,7 +44,11 @@ f="conserver/Makefile.in"
 
 %configure --with-libwrap \
         --with-openssl \
-        --with-pam
+        --with-pam \
+        --with-gssapi \
+        --with-uds \
+        --with-striprealm \
+        --with-port=782
 
 make %{?_smp_mflags}
 
@@ -78,16 +79,6 @@ rm -rf $RPM_BUILD_ROOT
 if [ -x %{_initrddir}/conserver ]; then
   /sbin/chkconfig --add conserver
 fi
-# make sure /etc/services has a conserver entry
-if ! egrep '\<conserver\>' /etc/services > /dev/null 2>&1 ; then
-  echo "console		782/tcp		conserver" >> /etc/services
-fi
-
-%post client
-# make sure /etc/services has a conserver entry
-if ! egrep '\<conserver\>' /etc/services > /dev/null 2>&1 ; then
-  echo "console		782/tcp		conserver" >> /etc/services
-fi
 
 
 %preun
@@ -117,6 +108,13 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Tue Jan 25 2011 Patrick "Jima" Laughton <jima@beer.tclug.org> 8.1.18-1
+- Updated to newer version for added Kerberos support (BZ#652688)
+- Fixed BZ#466541
+- Fixed broken tcp_wrappers support
+- Enabled Unix Domain Socket support
+- Removed upstream-adopted patches
+
 * Fri Aug 21 2009 Tomas Mraz <tmraz@redhat.com> - 8.1.16-9
 - rebuilt with new openssl
 

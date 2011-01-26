@@ -1,0 +1,12 @@
+diff -urN conserver-8.1.18/contrib/redhat-rpm/conserver.init conserver-8.1.18-patched/contrib/redhat-rpm/conserver.init
+--- conserver-8.1.18/contrib/redhat-rpm/conserver.init	2009-10-07 17:59:58.000000000 -0500
++++ conserver-8.1.18-patched/contrib/redhat-rpm/conserver.init	2011-01-25 17:24:45.000000000 -0600
+@@ -2,7 +2,7 @@
+ #
+ # conserver -- serial-port console daemon
+ #
+-# chkconfig: 2345 92 08
++# chkconfig: - 92 08
+ # description: conserver is a serial-port console daemon
+ # config: /etc/conserver.cf
+ #
