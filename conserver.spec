@@ -1,6 +1,6 @@
 Name:           conserver
 Version:        8.1.18
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
@@ -46,7 +46,6 @@ f="conserver/Makefile.in"
         --with-openssl \
         --with-pam \
         --with-gssapi \
-        --with-uds \
         --with-striprealm \
         --with-port=782
 
@@ -108,6 +107,9 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Mon Jan 31 2011 Patrick "Jima" Laughton <jima@beer.tclug.org> 8.1.18-2
+- Paolo Bonzini advises --with-uds would be a Bad Thing; removed (thanks!)
+
 * Tue Jan 25 2011 Patrick "Jima" Laughton <jima@beer.tclug.org> 8.1.18-1
 - Updated to newer version for added Kerberos support (BZ#652688)
 - Fixed BZ#466541
