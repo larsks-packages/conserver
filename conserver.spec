@@ -1,6 +1,6 @@
 Name:           conserver
 Version:        8.1.18
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
@@ -107,6 +107,9 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 8.1.18-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
 * Mon Jan 31 2011 Patrick "Jima" Laughton <jima@beer.tclug.org> 8.1.18-2
 - Paolo Bonzini advises --with-uds would be a Bad Thing; removed (thanks!)
 
