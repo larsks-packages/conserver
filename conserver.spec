@@ -1,21 +1,22 @@
 Name:           conserver
 Version:        8.1.18
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
 License:        BSD with advertising and zlib
 URL:            http://www.conserver.com/
 Source0:        http://www.conserver.com/%{name}-%{version}.tar.gz
+Source1:	%{name}.service
 Patch0:         %{name}-no-exampledir.patch
-Patch1:         %{name}-initscript.patch
+#Patch1:         %{name}-initscript.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  pam-devel, openssl-devel, tcp_wrappers-devel, krb5-devel
 BuildRequires:  libgssapi-devel, libgssglue-devel
-Requires(post): /sbin/chkconfig
-Requires(preun): /sbin/chkconfig
-Requires(preun): /sbin/service
+Requires(post): systemd-units
+Requires(preun): systemd-units
+Requires(postun): systemd-units
 
 %description
 Conserver is an application that allows multiple users to watch a serial 
@@ -33,7 +34,7 @@ This is the client package needed to interact with a Conserver daemon.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
+#%patch1 -p1
 
 
 %build
@@ -67,33 +68,49 @@ make install DESTDIR=$RPM_BUILD_ROOT
   > $RPM_BUILD_ROOT/%{_sysconfdir}/conserver.passwd
 
 # install copy of init script
-%{__mkdir_p} $RPM_BUILD_ROOT/%{_initrddir}
-%{__cp} contrib/redhat-rpm/conserver.init $RPM_BUILD_ROOT/%{_initrddir}/conserver
+#%{__mkdir_p} $RPM_BUILD_ROOT/%{_initrddir}
+#%{__cp} contrib/redhat-rpm/conserver.init $RPM_BUILD_ROOT/%{_initrddir}/conserver
+install -D -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_unitdir}/conserver.service
 
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if [ -x %{_initrddir}/conserver ]; then
-  /sbin/chkconfig --add conserver
+if [ $1 -eq 1 ] ; then 
+    # Initial installation 
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
-
 
 %preun
-if [ "$1" = 0 ]; then
-  if [ -x %{_initrddir}/conserver ]; then
-    %{_initrddir}/conserver stop > /dev/null 2>&1
-    /sbin/chkconfig --del conserver
-  fi
+if [ $1 -eq 0 ] ; then
+    # Package removal, not upgrade
+    /bin/systemctl --no-reload disable conserver.service > /dev/null 2>&1 || :
+    /bin/systemctl stop conserver.service > /dev/null 2>&1 || :
 fi
 
+%postun
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
+if [ $1 -ge 1 ] ; then
+    # Package upgrade, not uninstall
+    /bin/systemctl try-restart conserver.service >/dev/null 2>&1 || :
+fi
+
+%triggerun -- conserver < 8.1.18-5
+# Save the current service runlevel info
+# User must manually run systemd-sysv-convert --apply conserver
+# to migrate them to systemd targets
+/usr/bin/systemd-sysv-convert --save conserver >/dev/null 2>&1 ||:
+
+# Run these because the SysV package being removed won't do them
+/sbin/chkconfig --del conserver >/dev/null 2>&1 || :
+/bin/systemctl try-restart conserver.service >/dev/null 2>&1 || :
 
 %files
 %defattr(-,root,root,-)
 %doc CHANGES FAQ LICENSE INSTALL README conserver.cf/samples/ conserver.cf/conserver.cf conserver.cf/conserver.passwd
 %config(noreplace) %{_sysconfdir}/conserver.*
-%{_initrddir}/conserver
+%{_unitdir}/conserver.service
 %{_libdir}/conserver
 %{_mandir}/man5/conserver.cf.5.gz
 %{_mandir}/man5/conserver.passwd.5.gz
@@ -107,6 +124,9 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Tue Apr 17 2012 Jon Ciesla <limburgher@gmail.com> - 8.1.18-5
+- Migrate to systemd, BZ 771450.
+
 * Thu Jan 12 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 8.1.18-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
