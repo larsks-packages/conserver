@@ -1,6 +1,6 @@
 Name:           conserver
 Version:        8.1.18
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
@@ -124,6 +124,9 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Wed Jul 18 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 8.1.18-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
 * Tue Apr 17 2012 Jon Ciesla <limburgher@gmail.com> - 8.1.18-5
 - Migrate to systemd, BZ 771450.
 
