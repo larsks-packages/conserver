@@ -1,6 +1,6 @@
 Name:           conserver
 Version:        8.1.18
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
@@ -10,10 +10,11 @@ Source0:        http://www.conserver.com/%{name}-%{version}.tar.gz
 Source1:	%{name}.service
 Patch0:         %{name}-no-exampledir.patch
 #Patch1:         %{name}-initscript.patch
+Patch2:         %{name}-gssapi.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  pam-devel, openssl-devel, tcp_wrappers-devel, krb5-devel
-BuildRequires:  libgssapi-devel, libgssglue-devel
+BuildRequires:  autoconf, automake, systemd-units
 Requires(post): systemd-units
 Requires(preun): systemd-units
 Requires(postun): systemd-units
@@ -35,13 +36,15 @@ This is the client package needed to interact with a Conserver daemon.
 %setup -q
 %patch0 -p1
 #%patch1 -p1
-
+%patch2 -p1
 
 %build
 # we don't want to install the solaris conserver.rc file
 f="conserver/Makefile.in"
 %{__mv} $f $f.orig
 %{__sed} -e 's/^.*conserver\.rc.*$//' < $f.orig > $f
+
+autoreconf -f -i
 
 %configure --with-libwrap \
         --with-openssl \
@@ -124,6 +127,9 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Mon Sep 16 2013 Jiri Kastner <jkastner (at) redhat (dot) com> - 8.1.18-9
+- removed libgss*-devel build dependency
+
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 8.1.18-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
