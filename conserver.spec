@@ -1,6 +1,6 @@
 Name:           conserver
-Version:        8.1.18
-Release:        9%{?dist}
+Version:        8.1.20
+Release:        1%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
@@ -13,7 +13,7 @@ Patch0:         %{name}-no-exampledir.patch
 Patch2:         %{name}-gssapi.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  pam-devel, openssl-devel, tcp_wrappers-devel, krb5-devel
+BuildRequires:  pam-devel, openssl-devel, tcp_wrappers-devel, krb5-devel, freeipmi-devel
 BuildRequires:  autoconf, automake, systemd-units
 Requires(post): systemd-units
 Requires(preun): systemd-units
@@ -49,6 +49,7 @@ autoreconf -f -i
 %configure --with-libwrap \
         --with-openssl \
         --with-pam \
+        --with-freeipmi \
         --with-gssapi \
         --with-striprealm \
         --with-port=782
@@ -127,6 +128,10 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Mon Apr 14 2014 Jiri Kastner <jkastner (at) redhat (dot) com> - 8.1.20-1
+- updated to new release
+- added support for freeipmi (serial over lan)
+
 * Mon Sep 16 2013 Jiri Kastner <jkastner (at) redhat (dot) com> - 8.1.18-9
 - removed libgss*-devel build dependency
 
