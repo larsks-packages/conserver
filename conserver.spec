@@ -1,6 +1,6 @@
 Name:           conserver
-Version:        8.1.20
-Release:        3%{?dist}
+Version:        8.2.0
+Release:        1%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
@@ -128,6 +128,9 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Wed Jan  7 2015 Jiri Kastner <jkastner (at) redhat (dot) com> - 8.2.0-1
+- updated to new release
+
 * Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 8.1.20-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
