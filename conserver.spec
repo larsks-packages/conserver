@@ -1,6 +1,6 @@
 Name:           conserver
 Version:        8.2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
@@ -39,6 +39,7 @@ This is the client package needed to interact with a Conserver daemon.
 %patch2 -p1
 
 %build
+%global _hardened_build 1
 # we don't want to install the solaris conserver.rc file
 f="conserver/Makefile.in"
 %{__mv} $f $f.orig
@@ -128,6 +129,9 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Mon Jan 12 2015 Jiri Kastner <jkastner (at) redhat (dot) com> - 8.2.0-2
+- hardening build (BZ#955327)
+
 * Wed Jan  7 2015 Jiri Kastner <jkastner (at) redhat (dot) com> - 8.2.0-1
 - updated to new release
 
