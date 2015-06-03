@@ -1,6 +1,6 @@
 Name:           conserver
-Version:        8.2.0
-Release:        2%{?dist}
+Version:        8.2.1
+Release:        1%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
@@ -129,6 +129,9 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Wed Jun  3 2015 Jiri Kastner <jkastner (at) redhat (dot) com> - 8.2.1-1
+- updated to 8.2.1 (BZ#1225592)
+
 * Mon Jan 12 2015 Jiri Kastner <jkastner (at) redhat (dot) com> - 8.2.0-2
 - hardening build (BZ#955327)
 
