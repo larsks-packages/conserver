@@ -1,6 +1,25 @@
+%if 0%{?fedora} >= 27 || 0%{?rhel} > 7
+%define use_libwrap 0
+%else
+%define use_libwrap 1
+%endif
+
+%if 0%{?fedora} > 25 || 0%{?rhel} > 7
+%define use_openssl10 1
+%else
+%define use_openssl10 0
+%endif
+
+
+%if 0%{?fedora} || 0%{?rhel} >= 7
+%define use_systemd 1
+%else
+%define use_systemd 0
+%endif
+
 Name:           conserver
 Version:        8.2.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
@@ -9,15 +28,28 @@ URL:            http://www.conserver.com/
 Source0:        http://www.conserver.com/%{name}-%{version}.tar.gz
 Source1:	%{name}.service
 Patch0:         %{name}-no-exampledir.patch
-#Patch1:         %{name}-initscript.patch
-Patch2:         %{name}-gssapi.patch
+Patch1:         %{name}-gssapi.patch
+%if !%{use_systemd}
+Patch2:         %{name}-initscript.patch
+%endif
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  pam-devel, openssl-devel, tcp_wrappers-devel, krb5-devel, freeipmi-devel
-BuildRequires:  autoconf, automake, systemd-units
-Requires(post): systemd-units
-Requires(preun): systemd-units
-Requires(postun): systemd-units
+BuildRequires:  autoconf, automake, pam-devel, krb5-devel, freeipmi-devel
+
+%if %{use_openssl10}
+BuildRequires:  compat-openssl10-devel
+%else
+BuildRequires:  openssl-devel
+%endif
+
+%if %{use_libwrap}
+BuildRequires:  tcp_wrappers-devel
+%endif
+
+%if %{use_systemd}
+BuildRequires:  systemd
+%{?systemd_requires}
+%endif
 
 %description
 Conserver is an application that allows multiple users to watch a serial 
@@ -35,8 +67,10 @@ This is the client package needed to interact with a Conserver daemon.
 %prep
 %setup -q
 %patch0 -p1
-#%patch1 -p1
+%patch1 -p1
+%if !%{use_systemd}
 %patch2 -p1
+%endif
 
 %build
 %global _hardened_build 1
@@ -47,8 +81,10 @@ f="conserver/Makefile.in"
 
 autoreconf -f -i
 
-%configure --with-libwrap \
-        --with-openssl \
+%configure --with-openssl \
+%if %{use_libwrap}
+        --with-libwrap \
+%endif
         --with-pam \
         --with-freeipmi \
         --with-gssapi \
@@ -73,49 +109,32 @@ make install DESTDIR=$RPM_BUILD_ROOT
   > $RPM_BUILD_ROOT/%{_sysconfdir}/conserver.passwd
 
 # install copy of init script
-#%{__mkdir_p} $RPM_BUILD_ROOT/%{_initrddir}
-#%{__cp} contrib/redhat-rpm/conserver.init $RPM_BUILD_ROOT/%{_initrddir}/conserver
-install -D -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_unitdir}/conserver.service
-
+%if %{use_systemd}
+%{__install} -D -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_unitdir}/conserver.service
+%else
+%{__install} -D contrib/redhat-rpm/conserver.init $RPM_BUILD_ROOT/%{_initrddir}/conserver
+%endif
 
 %clean
-rm -rf $RPM_BUILD_ROOT
 
 %post
-if [ $1 -eq 1 ] ; then 
-    # Initial installation 
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
+%systemd_post
 
 %preun
-if [ $1 -eq 0 ] ; then
-    # Package removal, not upgrade
-    /bin/systemctl --no-reload disable conserver.service > /dev/null 2>&1 || :
-    /bin/systemctl stop conserver.service > /dev/null 2>&1 || :
-fi
+%systemd_preun
 
 %postun
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-if [ $1 -ge 1 ] ; then
-    # Package upgrade, not uninstall
-    /bin/systemctl try-restart conserver.service >/dev/null 2>&1 || :
-fi
-
-%triggerun -- conserver < 8.1.18-5
-# Save the current service runlevel info
-# User must manually run systemd-sysv-convert --apply conserver
-# to migrate them to systemd targets
-/usr/bin/systemd-sysv-convert --save conserver >/dev/null 2>&1 ||:
-
-# Run these because the SysV package being removed won't do them
-/sbin/chkconfig --del conserver >/dev/null 2>&1 || :
-/bin/systemctl try-restart conserver.service >/dev/null 2>&1 || :
+%systemd_postun
 
 %files
 %defattr(-,root,root,-)
 %doc CHANGES FAQ LICENSE INSTALL README conserver.cf/samples/ conserver.cf/conserver.cf conserver.cf/conserver.passwd
 %config(noreplace) %{_sysconfdir}/conserver.*
+%if %{use_systemd}
 %{_unitdir}/conserver.service
+%else
+%{_initrddir}/conserver
+%endif
 %{_libdir}/conserver
 %{_mandir}/man5/conserver.cf.5.gz
 %{_mandir}/man5/conserver.passwd.5.gz
@@ -129,6 +148,11 @@ fi
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Sun Dec 10 2017 Jiri Kastner - 8.2.1-7
+- removed old systemd snippets and dependencies (BZ#850068)
+- changed dependency on openssl to compat-openssl10 for newer fedoras (BZ#1423307)
+- removed tcp_wrappers dependency (BZ#1518757)
+
 * Wed Aug 02 2017 Fedora Release Engineering <releng@fedoraproject.org> - 8.2.1-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 
