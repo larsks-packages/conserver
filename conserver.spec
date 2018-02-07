@@ -19,7 +19,7 @@
 
 Name:           conserver
 Version:        8.2.1
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
@@ -148,6 +148,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 8.2.1-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Sat Jan 20 2018 Björn Esser <besser82@fedoraproject.org> - 8.2.1-8
 - Rebuilt for switch to libxcrypt
 
