@@ -32,7 +32,6 @@ Patch1:         %{name}-gssapi.patch
 %if !%{use_systemd}
 Patch2:         %{name}-initscript.patch
 %endif
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  autoconf, automake, pam-devel, krb5-devel, freeipmi-devel
 
