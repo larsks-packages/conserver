@@ -33,6 +33,7 @@ Patch1:         %{name}-gssapi.patch
 Patch2:         %{name}-initscript.patch
 %endif
 
+BuildRequires:  gcc
 BuildRequires:  autoconf, automake, pam-devel, krb5-devel, freeipmi-devel
 
 %if %{use_openssl10}
