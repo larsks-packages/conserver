@@ -127,7 +127,6 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %systemd_postun
 
 %files
-%defattr(-,root,root,-)
 %doc CHANGES FAQ LICENSE INSTALL README conserver.cf/samples/ conserver.cf/conserver.cf conserver.cf/conserver.passwd
 %config(noreplace) %{_sysconfdir}/conserver.*
 %if %{use_systemd}
@@ -142,7 +141,6 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{_sbindir}/conserver
 
 %files client
-%defattr(-,root,root,-)
 %doc LICENSE
 %{_bindir}/console
 %{_mandir}/man1/console.1.gz
