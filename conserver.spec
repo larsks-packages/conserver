@@ -4,13 +4,6 @@
 %define use_libwrap 1
 %endif
 
-%if 0%{?fedora} > 25 || 0%{?rhel} > 7
-%define use_openssl10 1
-%else
-%define use_openssl10 0
-%endif
-
-
 %if 0%{?fedora} || 0%{?rhel} >= 7
 %define use_systemd 1
 %else
@@ -18,8 +11,8 @@
 %endif
 
 Name:           conserver
-Version:        8.2.1
-Release:        10%{?dist}
+Version:        8.2.2
+Release:        1%{?dist}
 Summary:        Serial console server daemon/client
 
 Group:          System Environment/Daemons
@@ -36,11 +29,7 @@ Patch2:         %{name}-initscript.patch
 BuildRequires:  gcc
 BuildRequires:  autoconf, automake, pam-devel, krb5-devel, freeipmi-devel
 
-%if %{use_openssl10}
-BuildRequires:  compat-openssl10-devel
-%else
 BuildRequires:  openssl-devel
-%endif
 
 %if %{use_libwrap}
 BuildRequires:  tcp_wrappers-devel
@@ -146,6 +135,10 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Fri Jan  4 2019 Jiri Kastner - 8.2.2-1
+- update to 8.2.2
+- fixes openssl-1.1 build
+
 * Thu Jul 12 2018 Fedora Release Engineering <releng@fedoraproject.org> - 8.2.1-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
