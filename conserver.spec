@@ -15,7 +15,6 @@ Version:        8.2.2
 Release:        2%{?dist}
 Summary:        Serial console server daemon/client
 
-Group:          System Environment/Daemons
 License:        BSD with advertising and zlib
 URL:            http://www.conserver.com/
 Source0:        http://www.conserver.com/%{name}-%{version}.tar.gz
@@ -48,7 +47,6 @@ and whistles to accentuate that basic functionality.
 
 %package client
 Summary: Serial console client
-Group: Applications/Communications
 
 %description client
 This is the client package needed to interact with a Conserver daemon.
