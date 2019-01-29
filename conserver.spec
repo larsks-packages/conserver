@@ -102,8 +102,6 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{__install} -D contrib/redhat-rpm/conserver.init $RPM_BUILD_ROOT/%{_initrddir}/conserver
 %endif
 
-%clean
-
 %post
 %systemd_post
 
