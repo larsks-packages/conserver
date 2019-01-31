@@ -12,7 +12,7 @@
 
 Name:           conserver
 Version:        8.2.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Serial console server daemon/client
 
 License:        BSD with advertising and zlib
@@ -131,6 +131,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 8.2.2-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
 * Mon Jan 14 2019 Björn Esser <besser82@fedoraproject.org> - 8.2.2-2
 - Rebuilt for libcrypt.so.2 (#1666033)
 
