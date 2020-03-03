@@ -12,7 +12,7 @@
 
 Name:           conserver
 Version:        8.2.2
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Serial console server daemon/client
 
 License:        BSD with advertising and zlib
@@ -35,7 +35,7 @@ BuildRequires:  tcp_wrappers-devel
 %endif
 
 %if %{use_systemd}
-BuildRequires:  systemd
+BuildRequires:  systemd-rpm-macros
 %{?systemd_requires}
 %endif
 
@@ -103,13 +103,13 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %endif
 
 %post
-%systemd_post
+%systemd_post conserver.service
 
 %preun
-%systemd_preun
+%systemd_preun conserver.service
 
 %postun
-%systemd_postun
+%systemd_postun conserver.service
 
 %files
 %doc CHANGES FAQ LICENSE INSTALL README conserver.cf/samples/ conserver.cf/conserver.cf conserver.cf/conserver.passwd
@@ -131,6 +131,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{_mandir}/man1/console.1.gz
 
 %changelog
+* Tue Mar  3 2020 Jiri Kastner <jkastner@fedoraproject.org> - 8.2.2-6
+- fix systemd scriplets
+
 * Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org>
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
