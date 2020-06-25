@@ -1,0 +1,9 @@
+PKG="conserver"
+NAME="Console server and client"
+CATEGORY="system"
+VERSION="8.2.5"
+DESC="Console server and client"
+CLASSES=none
+ARCH=sparc
+VENDOR="conserver.com"
+BASEDIR=/opt
