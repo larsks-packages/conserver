@@ -64,8 +64,6 @@ install: conserver
 	$(INSTALL_PROGRAM) conserver $(DESTDIR)$(sbindir)
 	$(MKDIR) $(DESTDIR)$(mandir)/man8
 	$(INSTALL) -m 0644 conserver.man $(DESTDIR)$(mandir)/man8/conserver.8
-	$(MKDIR) $(DESTDIR)$(exampledir)
-	$(INSTALL) conserver.rc $(DESTDIR)$(exampledir)
 	$(MKDIR) $(DESTDIR)$(pkglibdir)
 	$(INSTALL) convert $(DESTDIR)$(pkglibdir)/convert
 
