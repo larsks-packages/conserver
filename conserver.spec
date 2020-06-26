@@ -4,39 +4,25 @@
 %define use_libwrap 1
 %endif
 
-%if 0%{?fedora} || 0%{?rhel} >= 7
-%define use_systemd 1
-%else
-%define use_systemd 0
-%endif
-
 Name:           conserver
-Version:        8.2.2
-Release:        6%{?dist}
+Version:        8.2.5
+Release:        8%{?dist}
 Summary:        Serial console server daemon/client
 
 License:        BSD with advertising and zlib
 URL:            http://www.conserver.com/
-Source0:        http://www.conserver.com/%{name}-%{version}.tar.gz
+Source0:        https://github.com/bstansell/conserver/releases/download/v%{version}/conserver-%{version}.tar.gz
 Source1:	%{name}.service
-Patch0:         %{name}-no-exampledir.patch
-Patch1:         %{name}-gssapi.patch
-%if !%{use_systemd}
-Patch2:         %{name}-initscript.patch
-%endif
+#Patch0:         %{name}-no-exampledir.patch
+#Patch1:         %{name}-gssapi.patch
 
 BuildRequires:  gcc
 BuildRequires:  autoconf, automake, pam-devel, krb5-devel, freeipmi-devel
-
 BuildRequires:  openssl-devel
+BuildRequires:  systemd-rpm-macros
 
 %if %{use_libwrap}
 BuildRequires:  tcp_wrappers-devel
-%endif
-
-%if %{use_systemd}
-BuildRequires:  systemd-rpm-macros
-%{?systemd_requires}
 %endif
 
 %description
@@ -52,12 +38,7 @@ Summary: Serial console client
 This is the client package needed to interact with a Conserver daemon.
 
 %prep
-%setup -q
-%patch0 -p1
-%patch1 -p1
-%if !%{use_systemd}
-%patch2 -p1
-%endif
+%autosetup
 
 %build
 %global _hardened_build 1
@@ -96,11 +77,10 @@ make install DESTDIR=$RPM_BUILD_ROOT
   > $RPM_BUILD_ROOT/%{_sysconfdir}/conserver.passwd
 
 # install copy of init script
-%if %{use_systemd}
 %{__install} -D -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_unitdir}/conserver.service
-%else
-%{__install} -D contrib/redhat-rpm/conserver.init $RPM_BUILD_ROOT/%{_initrddir}/conserver
-%endif
+
+# remove examples directory
+rm -rf $RPM_BUILD_ROOT/usr/share/examples
 
 %post
 %systemd_post conserver.service
@@ -112,13 +92,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %systemd_postun conserver.service
 
 %files
-%doc CHANGES FAQ LICENSE INSTALL README conserver.cf/samples/ conserver.cf/conserver.cf conserver.cf/conserver.passwd
+%doc CHANGES FAQ LICENSE INSTALL conserver.cf/samples/ conserver.cf/conserver.cf conserver.cf/conserver.passwd
 %config(noreplace) %{_sysconfdir}/conserver.*
-%if %{use_systemd}
 %{_unitdir}/conserver.service
-%else
-%{_initrddir}/conserver
-%endif
 %{_libdir}/conserver
 %{_mandir}/man5/conserver.cf.5.gz
 %{_mandir}/man5/conserver.passwd.5.gz
